@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "py-bookify"
+version = "0.1.0"
+description = "Convert website articles to an awesome e-book"
+authors = ["Ilya Chesalin <ilya.chesalin@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "bookify"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+html2text = "2020.1.16"
+requests = "2.30.0"
+typer = {extras = ["all"], version = "^0.9.0"}
+
+[tool.poetry.group.dev.dependencies]
+bandit = "1.7.5"
+black = "23.3.0"
+pre-commit = "3.3.2"
+pylint = "2.17.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
