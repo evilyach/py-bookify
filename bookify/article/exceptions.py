@@ -1,0 +1,2 @@
+class BadArticleException(Exception):
+    pass

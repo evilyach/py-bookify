@@ -1,11 +1,11 @@
 import typer
-from sqlalchemy.orm import Session
 from typing_extensions import Annotated, Never
 
 from bookify.article.models import Article
 from bookify.db import Base, engine
 from bookify.download import download_html_from_url
 from bookify.logger import log
+from bookify.parse import ParseHTML
 
 
 def convert_command(
@@ -13,22 +13,23 @@ def convert_command(
         list[str],
         typer.Argument(help="Provide list of URLs or path to file"),
     ],
+    name: Annotated[
+        str,
+        typer.Option("--name", help="Name of the book"),
+    ],
 ) -> None | Never:
-    if not urls:
-        log.error("You provided no URLs...")
-
-        raise typer.Exit(-1)
-
     Base.metadata.create_all(engine)
 
-    for url in urls:
+    for count, url in enumerate(urls):
         article = Article.get_by_url(url)
 
-        if not article:
+        if article:
+            parser = ParseHTML(article.html)
+        else:
             html = download_html_from_url(url)
-
-            with Session(engine) as session:
-                session.add(Article(url=url, html=html))
-                session.commit()
+            parser = ParseHTML(html, name=name, count=count)
+            article = Article.create(url=url, html=html, title=parser.get_title())
 
             log.info(f"Uploaded {url} to the database")
+
+        parser.convert_to_markdown()
