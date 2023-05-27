@@ -435,6 +435,7 @@ disable=
     raw-checker-failed,
     suppressed-message,
     too-few-public-methods,
+    too-many-instance-attributes,
     use-symbolic-message-instead,
     useless-suppression,
 

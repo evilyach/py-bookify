@@ -13,8 +13,9 @@ class Article(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     url: Mapped[str] = mapped_column(String)
-    title: Mapped[str] = mapped_column(String)
-    html: Mapped[HTML] = mapped_column(Text)
+    author: Mapped[str | None] = mapped_column(String, nullable=True)
+    title: Mapped[str | None] = mapped_column(String, nullable=True)
+    html: Mapped[HTML | None] = mapped_column(Text, nullable=True)
     markdown: Mapped[Markdown | None] = mapped_column(Text, nullable=True)
 
     def __repr__(self) -> str:
